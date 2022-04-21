@@ -1,0 +1,95 @@
+import random
+
+ascii = """
+ ______  ____   __      ______   ____    __      ______   ___     ___ 
+|      ||    | /  ]    |      | /    |  /  ]    |      | /   \   /  _]
+|      | |  | /  /     |      ||  o  | /  /     |      ||     | /  [_ 
+|_|  |_| |  |/  /      |_|  |_||     |/  /      |_|  |_||  O  ||    _]
+  |  |   |  /   \_       |  |  |  _  /   \_       |  |  |     ||   [_ 
+  |  |   |  \     |      |  |  |  |  \     |      |  |  |     ||     |
+  |__|  |____\____|      |__|  |__|__|\____|      |__|   \___/ |_____|
+                                                                      
+"""
+
+players = [" X ", " O "]
+game_is_on = True
+replay = "Y"
+
+
+def play():
+    turn = 1
+    player = ""
+
+    # Checking whose turn it is.
+    while game_is_on:
+        if turn % 2 != 0:
+            player = who_starts
+        elif turn % 2 == 0:
+            if who_starts == " X ":
+                player = " O "
+            elif who_starts == " O ":
+                player = " X "
+
+        #Using Try to make sure the input given is a Integer
+        try:
+            position = int(input(f"\n{player}! Type a position using the corresponding numbers: "))
+            position -= 1
+
+            # Making sure that the position they have chosen exists in the list of possible choices.
+            if position < 0 or position > 8:
+                print("Sorry, that position doesnt exist, try picking a number between 1-9")
+
+            else:
+                # Making sure that the position they have chosen has not been chosen before.
+                if grid[position] == "   ":
+                    grid[position] = player
+                    print(f"{grid[0]}|{grid[1]}|{grid[2]}\n-----------\n{grid[3]}|{grid[4]}|{grid[5]}\n-----------\n{grid[6]}|" 
+                            f"{grid[7]}|{grid[8]}")
+                    turn += 1
+                else:
+                    print(f"\n{player}! That spot has already been taken. Try Again")
+
+            # Did someone win?
+            # Horizontal
+            if grid[0] == " O " and grid[1] == " O " and grid[2] == " O " or grid[0] == " X " and grid[1] == " X " and grid[2] == " X ":
+                break
+            elif grid[3] == " O " and grid[4] == " O " and grid[5] == " O " or grid[3] == " X " and grid[4] == " X " and grid[5] == " X ":
+                break
+            elif grid[6] == " O " and grid[7] == " O " and grid[8] == " O " or grid[6] == " X " and grid[7] == " X " and grid[8] == " X ":
+                break
+
+            # Vertical
+            elif grid[0] == " O " and grid[3] == " O " and grid[6] == " O " or grid[0] == " X " and grid[3] == " X " and grid[6] == " X ":
+                break
+            elif grid[1] == " O " and grid[4] == " O " and grid[7] == " O " or grid[1] == " X " and grid[4] == " X " and grid[7] == " X ":
+                break
+            elif grid[2] == " O " and grid[5] == " O " and grid[8] == " O " or grid[2] == " X " and grid[5] == " X " and grid[8] == " X ":
+                break
+
+            # Corners
+            elif grid[0] == " O " and grid[4] == " O " and grid[8] == " O " or grid[0] == " X " and grid[4] == " X " and grid[8] == " X ":
+                break
+            elif grid[2] == " O " and grid[4] == " O " and grid[6] == " O " or grid[2] == " X " and grid[4] == " X " and grid[6] == " X ":
+                break
+        except ValueError:
+            print(f"\nSorry, that is not a number is it?")
+
+
+print(ascii)
+
+start = input("Do you want to play a 2-player game of Tic-Tac-Toe? Y or N. ").upper()
+if start == "Y":
+    while replay == "Y":
+        grid = ["   ", "   ", "   ",
+                "   ", "   ", "   ",
+                "   ", "   ", "   ",
+                ]
+        who_starts = random.choice(players)
+
+        print(f"\n\n{who_starts} is starting.\n")
+        print(
+            f" 1 | 2 | 3 \n-----------\n 4 | 5 | 6 \n-----------\n 7 | 8 | 9 ")
+
+        play()
+
+        replay = input("Good game guys! That was close, or not, I don't know.\nDo you want to play again? Y or N. ").upper()
